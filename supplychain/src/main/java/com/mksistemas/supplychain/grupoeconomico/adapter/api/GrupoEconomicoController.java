@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mksistemas.supplychain.grupoeconomico.AlterarGrupoEconomicoUseCase;
 import com.mksistemas.supplychain.grupoeconomico.AtivarGrupoEconomicoUseCase;
 import com.mksistemas.supplychain.grupoeconomico.CriarGrupoEconomicoUseCase;
+import com.mksistemas.supplychain.grupoeconomico.DesativarGrupoEconomicoUseCase;
 import com.mksistemas.supplychain.grupoeconomico.GrupoEconomicoMessages;
 import com.mksistemas.supplychain.grupoeconomico.domain.GrupoEconomicoId;
 import com.mksistemas.supplychain.library.validators.tsid.TsidId;
@@ -23,12 +24,15 @@ public class GrupoEconomicoController {
 	private final CriarGrupoEconomicoUseCase criarGrupoEconomico;
 	private final AlterarGrupoEconomicoUseCase alterarGrupoEconomico;
 	private final AtivarGrupoEconomicoUseCase ativarGrupoEconomico;
+	private final DesativarGrupoEconomicoUseCase desativarGrupoEconomico;
 
 	public GrupoEconomicoController(CriarGrupoEconomicoUseCase criarGrupoEconomico,
-			AlterarGrupoEconomicoUseCase alterarGrupoEconomico, AtivarGrupoEconomicoUseCase atibarGrupoEconomico) {
+			AlterarGrupoEconomicoUseCase alterarGrupoEconomico, AtivarGrupoEconomicoUseCase ativarGrupoEconomico,
+			DesativarGrupoEconomicoUseCase desativarGrupoEconomico) {
 		this.criarGrupoEconomico = criarGrupoEconomico;
 		this.alterarGrupoEconomico = alterarGrupoEconomico;
-		this.ativarGrupoEconomico = atibarGrupoEconomico;
+		this.ativarGrupoEconomico = ativarGrupoEconomico;
+		this.desativarGrupoEconomico = desativarGrupoEconomico;
 	}
 
 	@PostMapping
@@ -50,6 +54,14 @@ public class GrupoEconomicoController {
 			@PathVariable(required = true, name = "grupoId") @TsidId(message = GrupoEconomicoMessages.GRUPO_ID_INCORRETO) String grupoId) {
 		AtivarGrupoEconomicoUseCase.Resposta response = ativarGrupoEconomico
 				.execute(new AtivarGrupoEconomicoUseCase.Requisicao(GrupoEconomicoId.from(grupoId)));
+		return ResponseEntity.ok(response);
+	}
+
+	@PatchMapping(path = "/desativar/{grupoId}")
+	public ResponseEntity<DesativarGrupoEconomicoUseCase.Resposta> desativarOrganizacao(
+			@PathVariable(required = true, name = "grupoId") @TsidId(message = GrupoEconomicoMessages.GRUPO_ID_INCORRETO) String grupoId) {
+		DesativarGrupoEconomicoUseCase.Resposta response = desativarGrupoEconomico
+				.execute(new DesativarGrupoEconomicoUseCase.Requisicao(GrupoEconomicoId.from(grupoId)));
 		return ResponseEntity.ok(response);
 	}
 
