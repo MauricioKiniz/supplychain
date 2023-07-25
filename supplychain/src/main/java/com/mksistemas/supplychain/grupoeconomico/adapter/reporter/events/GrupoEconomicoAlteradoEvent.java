@@ -4,6 +4,9 @@ import jakarta.annotation.Generated;
 
 public class GrupoEconomicoAlteradoEvent extends BaseGrupoEconomicoEvent {
 
+	public GrupoEconomicoAlteradoEvent() {
+	}
+
 	@Generated("SparkTools")
 	private GrupoEconomicoAlteradoEvent(Builder builder) {
 		this.grupoEconomicoId = builder.grupoEconomicoId;

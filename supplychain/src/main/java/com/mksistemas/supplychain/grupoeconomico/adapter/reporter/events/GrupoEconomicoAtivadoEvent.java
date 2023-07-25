@@ -2,13 +2,13 @@ package com.mksistemas.supplychain.grupoeconomico.adapter.reporter.events;
 
 import jakarta.annotation.Generated;
 
-public class GrupoEconomicoCriadoEvent extends BaseGrupoEconomicoEvent {
+public class GrupoEconomicoAtivadoEvent extends BaseGrupoEconomicoEvent {
 
-	public GrupoEconomicoCriadoEvent() {
+	public GrupoEconomicoAtivadoEvent() {
 	}
 
 	@Generated("SparkTools")
-	private GrupoEconomicoCriadoEvent(Builder builder) {
+	private GrupoEconomicoAtivadoEvent(Builder builder) {
 		this.grupoEconomicoId = builder.grupoEconomicoId;
 		this.nome = builder.nome;
 		this.ativo = builder.ativo;
@@ -43,8 +43,9 @@ public class GrupoEconomicoCriadoEvent extends BaseGrupoEconomicoEvent {
 			return this;
 		}
 
-		public GrupoEconomicoCriadoEvent build() {
-			return new GrupoEconomicoCriadoEvent(this);
+		public GrupoEconomicoAtivadoEvent build() {
+			return new GrupoEconomicoAtivadoEvent(this);
 		}
 	}
+
 }

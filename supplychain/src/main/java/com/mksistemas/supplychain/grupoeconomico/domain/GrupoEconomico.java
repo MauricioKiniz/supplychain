@@ -66,6 +66,14 @@ public class GrupoEconomico extends AbstractAggregateRoot<GrupoEconomico> {
 		this.ativo = ativo;
 	}
 
+	public void ativar() {
+		this.ativo = true;
+	}
+
+	public void desativar() {
+		this.ativo = false;
+	}
+
 	@Generated("SparkTools")
 	public static Builder builder() {
 		return new Builder();
@@ -105,4 +113,5 @@ public class GrupoEconomico extends AbstractAggregateRoot<GrupoEconomico> {
 			return new GrupoEconomico(this);
 		}
 	}
+
 }

@@ -5,12 +5,14 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 import com.mksistemas.supplychain.grupoeconomico.application.alterar.AlterarGrupoEconomicoRepository;
+import com.mksistemas.supplychain.grupoeconomico.application.ativar.AtivarGrupoEconomicoRepository;
 import com.mksistemas.supplychain.grupoeconomico.application.criar.CriarGrupoEconomicoRepository;
 import com.mksistemas.supplychain.grupoeconomico.domain.GrupoEconomico;
 import com.mksistemas.supplychain.grupoeconomico.domain.GrupoEconomicoId;
 
 @Component
-class GrupoEconomicoJpaRepository implements CriarGrupoEconomicoRepository, AlterarGrupoEconomicoRepository {
+class GrupoEconomicoJpaRepository
+		implements CriarGrupoEconomicoRepository, AlterarGrupoEconomicoRepository, AtivarGrupoEconomicoRepository {
 
 	private final BaseGrupoEconomicoJpaRepository baseRepository;
 
