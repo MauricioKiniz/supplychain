@@ -1,12 +1,19 @@
 package com.mksistemas.supplychain.grupoeconomico.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.data.domain.AbstractAggregateRoot;
 
 import jakarta.annotation.Generated;
 import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Version;
 
 @Entity(name = "gruposeconomicos")
@@ -26,12 +33,18 @@ public class GrupoEconomico extends AbstractAggregateRoot<GrupoEconomico> {
 	@Column(name = "ativo", length = 100, nullable = false)
 	private boolean ativo = true;
 
+	@ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+	@CollectionTable(name = "organizacoes_grupoeconomico", joinColumns = @JoinColumn(name = "grupo_economico_id"))
+	@Column(name = "organizacao_id", nullable = false, length = 50)
+	private List<String> organizacoes = new ArrayList<>();
+
 	@Generated("SparkTools")
 	private GrupoEconomico(Builder builder) {
 		this.grupoEconomicoId = builder.grupoEconomicoId;
 		this.nome = builder.nome;
 		this.version = builder.version;
 		this.ativo = builder.ativo;
+		this.organizacoes = builder.organizacoes;
 	}
 
 	public GrupoEconomicoId getGrupoEconomicoId() {
@@ -66,12 +79,24 @@ public class GrupoEconomico extends AbstractAggregateRoot<GrupoEconomico> {
 		this.ativo = ativo;
 	}
 
+	public List<String> getOrganizacoes() {
+		return organizacoes;
+	}
+
+	public void setOrganizacoes(List<String> organizacoes) {
+		this.organizacoes = organizacoes;
+	}
+
 	public void ativar() {
 		this.ativo = true;
 	}
 
 	public void desativar() {
 		this.ativo = false;
+	}
+
+	public boolean organizacaoVinculada(String organizacaoId) {
+		return organizacoes.contains(organizacaoId);
 	}
 
 	@Generated("SparkTools")
@@ -85,6 +110,7 @@ public class GrupoEconomico extends AbstractAggregateRoot<GrupoEconomico> {
 		private String nome;
 		private Integer version;
 		private boolean ativo = true;
+		private List<String> organizacoes = new ArrayList<>();
 
 		private Builder() {
 		}
@@ -106,6 +132,11 @@ public class GrupoEconomico extends AbstractAggregateRoot<GrupoEconomico> {
 
 		public Builder withAtivo(boolean ativo) {
 			this.ativo = ativo;
+			return this;
+		}
+
+		public Builder withOrganizacoes(List<String> organizacoes) {
+			this.organizacoes = organizacoes;
 			return this;
 		}
 
