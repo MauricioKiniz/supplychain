@@ -1,6 +1,7 @@
 package com.mksistemas.supplychain.grupoeconomico.adapter.reporter;
 
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
 
 import com.mksistemas.supplychain.grupoeconomico.adapter.reporter.events.GrupoEconomicoOrganizacaoVinculadaEvent;
 import com.mksistemas.supplychain.grupoeconomico.application.vincularorganizacao.VincularOrganizacaoReporter;
@@ -8,7 +9,8 @@ import com.mksistemas.supplychain.grupoeconomico.application.vincularorganizacao
 import com.mksistemas.supplychain.library.railway.Result;
 import com.mksistemas.supplychain.library.reporter.BaseReporterEvent;
 
-public class VincularOrganizacaoReporterImpl implements VincularOrganizacaoReporter,
+@Component
+class VincularOrganizacaoReporterImpl implements VincularOrganizacaoReporter,
 		BaseReporterEvent<GrupoEconomicoOrganizacaoVinculadaEvent, ResultadoProcessoVinculo> {
 
 	private final ApplicationEventPublisher applicationEventPublisher;

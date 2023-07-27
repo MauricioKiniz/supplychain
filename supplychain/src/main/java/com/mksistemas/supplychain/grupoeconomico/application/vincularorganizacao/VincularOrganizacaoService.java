@@ -11,6 +11,7 @@ import com.mksistemas.supplychain.grupoeconomico.GrupoEconomicoMessages;
 import com.mksistemas.supplychain.grupoeconomico.VincularOrganizacaoUseCase;
 import com.mksistemas.supplychain.grupoeconomico.application.vincularorganizacao.VincularOrganizacaoReporter.ResultadoProcessoVinculo;
 import com.mksistemas.supplychain.grupoeconomico.domain.GrupoEconomico;
+import com.mksistemas.supplychain.grupoeconomico.domain.GrupoEconomicoId;
 import com.mksistemas.supplychain.library.exceptions.BusinessException;
 import com.mksistemas.supplychain.library.railway.Result;
 import com.mksistemas.supplychain.organizacao.OrganizacaoFacade;
@@ -35,15 +36,18 @@ class VincularOrganizacaoService implements VincularOrganizacaoUseCase {
 
 	@Override
 	public Resposta execute(@Valid Requisicao requisicao) {
-		GrupoEconomico grupo = repository.buscarPorId(requisicao.grupoEconomicoId())
+		GrupoEconomicoId grupoId = GrupoEconomicoId.from(requisicao.grupoEconomicoId());
+		GrupoEconomico grupo = repository.buscarPorId(grupoId)
 				.orElseThrow(() -> new BusinessException(GrupoEconomicoMessages.GRUPO_NAO_ENCONTRADO));
 		List<OrganizacaoProcessada> processadas = new ArrayList<>();
 		requisicao.organizacoes().forEach(organizacaoId -> processarVinculacao(organizacaoId, grupo, processadas));
 		List<String> adicionaveis = processadas.stream().filter(item -> item.erro() == null)
 				.map(item -> item.organizacaoId()).toList();
-		grupo.getOrganizacoes().addAll(adicionaveis);
-		repository.salvar(grupo);
-		reporter.reportEvent(Result.ofSuccess(new ResultadoProcessoVinculo(grupo, processadas)));
+		if (Boolean.FALSE.equals(adicionaveis.isEmpty())) {
+			grupo.getOrganizacoes().addAll(adicionaveis);
+			repository.salvar(grupo);
+			reporter.reportEvent(Result.ofSuccess(new ResultadoProcessoVinculo(grupo, processadas)));
+		}
 		return new Resposta(processadas);
 	}
 

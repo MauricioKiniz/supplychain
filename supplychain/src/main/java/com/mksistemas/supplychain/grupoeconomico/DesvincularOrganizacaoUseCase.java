@@ -9,8 +9,8 @@ import com.mksistemas.supplychain.library.validators.tsid.TsidId;
 
 import jakarta.validation.constraints.NotNull;
 
-public interface VincularOrganizacaoUseCase
-		extends UseCase<VincularOrganizacaoUseCase.Requisicao, VincularOrganizacaoUseCase.Resposta> {
+public interface DesvincularOrganizacaoUseCase
+		extends UseCase<DesvincularOrganizacaoUseCase.Requisicao, DesvincularOrganizacaoUseCase.Resposta> {
 
 	record Requisicao(@TsidId(message = GrupoEconomicoMessages.GRUPO_ID_INCORRETO) String grupoEconomicoId,
 			@NotNull(message = GrupoEconomicoMessages.GRUPO_LISTA_ORGANIZACOES) List<String> organizacoes) {

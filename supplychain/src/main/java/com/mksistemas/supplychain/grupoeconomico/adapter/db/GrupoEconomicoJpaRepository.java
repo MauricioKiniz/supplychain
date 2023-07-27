@@ -8,13 +8,15 @@ import com.mksistemas.supplychain.grupoeconomico.application.alterar.AlterarGrup
 import com.mksistemas.supplychain.grupoeconomico.application.ativar.AtivarGrupoEconomicoRepository;
 import com.mksistemas.supplychain.grupoeconomico.application.criar.CriarGrupoEconomicoRepository;
 import com.mksistemas.supplychain.grupoeconomico.application.desativar.DesativarGrupoEconomicoRepository;
+import com.mksistemas.supplychain.grupoeconomico.application.desvincularorganizacao.DesvincularOrganizacaoRepository;
 import com.mksistemas.supplychain.grupoeconomico.application.vincularorganizacao.VincularOrganizacaoRepository;
 import com.mksistemas.supplychain.grupoeconomico.domain.GrupoEconomico;
 import com.mksistemas.supplychain.grupoeconomico.domain.GrupoEconomicoId;
 
 @Component
 class GrupoEconomicoJpaRepository implements CriarGrupoEconomicoRepository, AlterarGrupoEconomicoRepository,
-		AtivarGrupoEconomicoRepository, DesativarGrupoEconomicoRepository, VincularOrganizacaoRepository {
+		AtivarGrupoEconomicoRepository, DesativarGrupoEconomicoRepository, VincularOrganizacaoRepository,
+		DesvincularOrganizacaoRepository {
 
 	private final BaseGrupoEconomicoJpaRepository baseRepository;
 
@@ -31,5 +33,4 @@ class GrupoEconomicoJpaRepository implements CriarGrupoEconomicoRepository, Alte
 	public Optional<GrupoEconomico> buscarPorId(GrupoEconomicoId grupoEconomicoId) {
 		return baseRepository.findById(grupoEconomicoId);
 	}
-
 }
