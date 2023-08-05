@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import com.github.f4b6a3.tsid.Tsid;
 import com.mksistemas.supplychain.grupoeconomico.GrupoEconomicoMessages;
 import com.mksistemas.supplychain.grupoeconomico.VincularOrganizacaoUseCase;
 import com.mksistemas.supplychain.grupoeconomico.application.vincularorganizacao.VincularOrganizacaoReporter.ResultadoProcessoVinculo;
@@ -44,7 +45,7 @@ class VincularOrganizacaoService implements VincularOrganizacaoUseCase {
 		List<String> adicionaveis = processadas.stream().filter(item -> item.erro() == null)
 				.map(item -> item.organizacaoId()).toList();
 		if (Boolean.FALSE.equals(adicionaveis.isEmpty())) {
-			grupo.getOrganizacoes().addAll(adicionaveis);
+			grupo.getOrganizacoes().addAll(adicionaveis.stream().map(org -> Tsid.from(org).toLong()).toList());
 			repository.salvar(grupo);
 			reporter.reportEvent(Result.ofSuccess(new ResultadoProcessoVinculo(grupo, processadas)));
 		}
@@ -54,10 +55,11 @@ class VincularOrganizacaoService implements VincularOrganizacaoUseCase {
 	private void processarVinculacao(String organizacaoId, GrupoEconomico grupo,
 			List<OrganizacaoProcessada> processadas) {
 		if (grupo.organizacaoVinculada(organizacaoId)) {
-			processadas.add(new OrganizacaoProcessada(organizacaoId, GrupoEconomicoMessages.ORGANIZACAO_JA_VINCULADA));
+			processadas.add(new OrganizacaoProcessada(organizacaoId,
+					GrupoEconomicoMessages.ORGANIZACAO_JA_VINCULADA));
 		} else {
 			organizacaoFacade.retornarOrganizacaoPorId(organizacaoId).ifPresentOrElse(
-					orgDto -> processadas.add(new OrganizacaoProcessada(organizacaoId, null)), 
+					orgDto -> processadas.add(new OrganizacaoProcessada(organizacaoId, null)),
 				() -> processadas.add(
 							new OrganizacaoProcessada(organizacaoId,
 									GrupoEconomicoMessages.ORGANIZACAO_NAO_ENCONTRADA)));

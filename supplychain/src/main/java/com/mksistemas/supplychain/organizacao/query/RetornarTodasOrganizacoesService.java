@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import com.mksistemas.supplychain.library.queriable.ProcessQuery;
+import com.mksistemas.supplychain.library.queryable.ProcessQuery;
 import com.mksistemas.supplychain.organizacao.RetornarTodasOrganizacoesUseCase;
 import com.mksistemas.supplychain.organizacao.query.vo.OrganizacaoDto;
 
@@ -25,20 +25,18 @@ class RetornarTodasOrganizacoesService implements RetornarTodasOrganizacoesUseCa
 
 	@Override
 	public Slice<OrganizacaoDto> execute(@Valid Requisicao request) {
-		return ProcessQuery.<OrganizacaoDto>of(entityManager).createQuery(
-				"""
-							SELECT
-								organizacao_id organizacaoId,
-								ativo,
-								codigo_pais codigoPais,
-								id_externo idExterno,
-								identidade,
-								nome,
-								time_zone_in_seconds timeZoneInSeconds
-							FROM organizacoes
-						""")
-				.ofType(OrganizacaoDto.class).setPageable(request.page())
-				.run();
+		return ProcessQuery.<OrganizacaoDto>of(entityManager).createQuery("""
+					SELECT
+						organizacao_id organizacaoId,
+						ativo,
+						codigo_pais codigoPais,
+						id_externo idExterno,
+						identidade,
+						nome,
+						time_zone_in_seconds timeZoneInSeconds
+					FROM organizacoes
+				""").ofType(OrganizacaoDto.class).setPageable(request.page())
+				.runAsSlice();
 	}
 
 	/*

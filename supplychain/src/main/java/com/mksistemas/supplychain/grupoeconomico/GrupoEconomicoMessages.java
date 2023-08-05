@@ -11,4 +11,5 @@ public class GrupoEconomicoMessages {
 	public static final String GRUPO_LISTA_ORGANIZACOES = "{grupoeconomico.vincular.organizacoes.listanula}";
 	public static final String ORGANIZACAO_NAO_ENCONTRADA = "{grupoeconomico.organizacao.naoencontrada}";
 	public static final String ORGANIZACAO_JA_VINCULADA = "{grupoeconomico.organizacao.javinculada}";
+	public static final String ORGANIZACAO_ID_INCORRETA = "{grupoeconomico.organizacao.id.incorreta}";
 }

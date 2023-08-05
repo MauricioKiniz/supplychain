@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.data.domain.AbstractAggregateRoot;
 
+import com.github.f4b6a3.tsid.Tsid;
+
 import jakarta.annotation.Generated;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CollectionTable;
@@ -33,10 +35,10 @@ public class GrupoEconomico extends AbstractAggregateRoot<GrupoEconomico> {
 	@Column(name = "ativo", length = 100, nullable = false)
 	private boolean ativo = true;
 
-	@ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+	@ElementCollection(targetClass = Long.class, fetch = FetchType.EAGER)
 	@CollectionTable(name = "organizacoes_grupoeconomico", joinColumns = @JoinColumn(name = "grupo_economico_id"))
-	@Column(name = "organizacao_id", nullable = false, length = 50)
-	private List<String> organizacoes = new ArrayList<>();
+	@Column(name = "organizacao_id", nullable = false)
+	private List<Long> organizacoes = new ArrayList<>();
 
 	@Generated("SparkTools")
 	private GrupoEconomico(Builder builder) {
@@ -79,11 +81,11 @@ public class GrupoEconomico extends AbstractAggregateRoot<GrupoEconomico> {
 		this.ativo = ativo;
 	}
 
-	public List<String> getOrganizacoes() {
+	public List<Long> getOrganizacoes() {
 		return organizacoes;
 	}
 
-	public void setOrganizacoes(List<String> organizacoes) {
+	public void setOrganizacoes(List<Long> organizacoes) {
 		this.organizacoes = organizacoes;
 	}
 
@@ -96,6 +98,11 @@ public class GrupoEconomico extends AbstractAggregateRoot<GrupoEconomico> {
 	}
 
 	public boolean organizacaoVinculada(String organizacaoId) {
+		Long orgId = Tsid.from(organizacaoId).toLong();
+		return organizacaoVinculada(orgId);
+	}
+
+	public boolean organizacaoVinculada(Long organizacaoId) {
 		return organizacoes.contains(organizacaoId);
 	}
 
@@ -110,7 +117,7 @@ public class GrupoEconomico extends AbstractAggregateRoot<GrupoEconomico> {
 		private String nome;
 		private Integer version;
 		private boolean ativo = true;
-		private List<String> organizacoes = new ArrayList<>();
+		private List<Long> organizacoes = new ArrayList<>();
 
 		private Builder() {
 		}
@@ -135,7 +142,7 @@ public class GrupoEconomico extends AbstractAggregateRoot<GrupoEconomico> {
 			return this;
 		}
 
-		public Builder withOrganizacoes(List<String> organizacoes) {
+		public Builder withOrganizacoes(List<Long> organizacoes) {
 			this.organizacoes = organizacoes;
 			return this;
 		}

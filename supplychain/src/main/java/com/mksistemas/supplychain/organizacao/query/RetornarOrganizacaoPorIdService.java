@@ -1,13 +1,12 @@
 package com.mksistemas.supplychain.organizacao.query;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import com.mksistemas.supplychain.library.queriable.ProcessQuery;
+import com.mksistemas.supplychain.library.queryable.ProcessQuery;
 import com.mksistemas.supplychain.organizacao.RetornarOrganizacaoPorIdUseCase;
 import com.mksistemas.supplychain.organizacao.query.vo.OrganizacaoDto;
 
@@ -27,7 +26,8 @@ class RetornarOrganizacaoPorIdService implements RetornarOrganizacaoPorIdUseCase
 
 	@Override
 	public Optional<OrganizacaoDto> execute(@Valid Requisicao requisicao) {
-		OrganizacaoDto dto = ProcessQuery.<OrganizacaoDto>of(manager).createQuery("""
+		return ProcessQuery.<OrganizacaoDto>of(manager).createQuery(
+				"""
 					SELECT
 						organizacao_id organizacaoId,
 						ativo,
@@ -44,7 +44,6 @@ class RetornarOrganizacaoPorIdService implements RetornarOrganizacaoPorIdUseCase
 				.ofType(OrganizacaoDto.class)
 				.setAdditional(nativeQuery -> nativeQuery.setParameter(1, requisicao.organizacaoId().getId().toLong()))
 				.runSingle();
-		return Objects.isNull(dto) ? Optional.empty() : Optional.of(dto);
 	}
 
 }

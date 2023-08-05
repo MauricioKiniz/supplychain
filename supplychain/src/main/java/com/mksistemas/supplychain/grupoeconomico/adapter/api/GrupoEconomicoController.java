@@ -1,6 +1,9 @@
 package com.mksistemas.supplychain.grupoeconomico.adapter.api;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mksistemas.supplychain.grupoeconomico.AlterarGrupoEconomicoUseCase;
 import com.mksistemas.supplychain.grupoeconomico.AtivarGrupoEconomicoUseCase;
+import com.mksistemas.supplychain.grupoeconomico.BuscarTodosGruposUseCase;
 import com.mksistemas.supplychain.grupoeconomico.CriarGrupoEconomicoUseCase;
 import com.mksistemas.supplychain.grupoeconomico.DesativarGrupoEconomicoUseCase;
 import com.mksistemas.supplychain.grupoeconomico.DesvincularOrganizacaoUseCase;
@@ -29,17 +33,19 @@ public class GrupoEconomicoController {
 	private final DesativarGrupoEconomicoUseCase desativarGrupoEconomico;
 	private final VincularOrganizacaoUseCase vincularOrganizacao;
 	private final DesvincularOrganizacaoUseCase desvincularOrganizacao;
+	private final BuscarTodosGruposUseCase buscarTodosGrupos;
 
 	public GrupoEconomicoController(CriarGrupoEconomicoUseCase criarGrupoEconomico,
 			AlterarGrupoEconomicoUseCase alterarGrupoEconomico, AtivarGrupoEconomicoUseCase ativarGrupoEconomico,
 			DesativarGrupoEconomicoUseCase desativarGrupoEconomico, VincularOrganizacaoUseCase vincularOrganizacao,
-			DesvincularOrganizacaoUseCase desvincularOrganizacao) {
+			DesvincularOrganizacaoUseCase desvincularOrganizacao, BuscarTodosGruposUseCase buscarTodosGrupos) {
 		this.criarGrupoEconomico = criarGrupoEconomico;
 		this.alterarGrupoEconomico = alterarGrupoEconomico;
 		this.ativarGrupoEconomico = ativarGrupoEconomico;
 		this.desativarGrupoEconomico = desativarGrupoEconomico;
 		this.vincularOrganizacao = vincularOrganizacao;
 		this.desvincularOrganizacao = desvincularOrganizacao;
+		this.buscarTodosGrupos = buscarTodosGrupos;
 	}
 
 	@PostMapping
@@ -84,6 +90,11 @@ public class GrupoEconomicoController {
 			@RequestBody DesvincularOrganizacaoUseCase.Requisicao requisicao) {
 		DesvincularOrganizacaoUseCase.Resposta response = desvincularOrganizacao.execute(requisicao);
 		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping
+	public ResponseEntity<List<BuscarTodosGruposUseCase.GrupoEconomicoDto>> buscarTodosGrupos() {
+		return ResponseEntity.ok(buscarTodosGrupos.execute(null));
 	}
 
 }

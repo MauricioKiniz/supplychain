@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import com.github.f4b6a3.tsid.Tsid;
 import com.mksistemas.supplychain.grupoeconomico.DesvincularOrganizacaoUseCase;
 import com.mksistemas.supplychain.grupoeconomico.GrupoEconomicoMessages;
 import com.mksistemas.supplychain.grupoeconomico.application.desvincularorganizacao.DesvincularOrganizacaoReporter.ResultadoProcessoDesvinculo;
@@ -14,7 +15,6 @@ import com.mksistemas.supplychain.grupoeconomico.domain.GrupoEconomico;
 import com.mksistemas.supplychain.grupoeconomico.domain.GrupoEconomicoId;
 import com.mksistemas.supplychain.library.exceptions.BusinessException;
 import com.mksistemas.supplychain.library.railway.Result;
-import com.mksistemas.supplychain.organizacao.OrganizacaoFacade;
 
 import jakarta.validation.Valid;
 
@@ -23,13 +23,11 @@ import jakarta.validation.Valid;
 @Validated
 class DesvincularOrganizacaoService implements DesvincularOrganizacaoUseCase {
 
-	private final OrganizacaoFacade organizacaoFacade;
 	private final DesvincularOrganizacaoRepository repository;
 	private final DesvincularOrganizacaoReporter reporter;
 
-	public DesvincularOrganizacaoService(OrganizacaoFacade organizacaoFacade,
-			DesvincularOrganizacaoRepository repository, DesvincularOrganizacaoReporter reporter) {
-		this.organizacaoFacade = organizacaoFacade;
+	public DesvincularOrganizacaoService(DesvincularOrganizacaoRepository repository,
+			DesvincularOrganizacaoReporter reporter) {
 		this.repository = repository;
 		this.reporter = reporter;
 	}
@@ -44,7 +42,7 @@ class DesvincularOrganizacaoService implements DesvincularOrganizacaoUseCase {
 		List<String> removiveis = processadas.stream().filter(item -> item.erro() == null)
 				.map(item -> item.organizacaoId()).toList();
 		if (Boolean.FALSE.equals(removiveis.isEmpty())) {
-			grupo.getOrganizacoes().removeAll(removiveis);
+			grupo.getOrganizacoes().removeAll(removiveis.stream().map(org -> Tsid.from(org).toLong()).toList());
 			repository.salvar(grupo);
 			reporter.reportEvent(Result.ofSuccess(new ResultadoProcessoDesvinculo(grupo, processadas)));
 		}
