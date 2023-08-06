@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.mksistemas.supplychain.organizacao.OrganizacaoFacade;
-import com.mksistemas.supplychain.organizacao.RetornarOrganizacaoPorIdUseCase;
+import com.mksistemas.supplychain.organizacao.BuscarOrganizacaoPorIdUseCase;
 import com.mksistemas.supplychain.organizacao.domain.OrganizacaoId;
 import com.mksistemas.supplychain.organizacao.query.vo.OrganizacaoDto;
 
@@ -21,8 +21,8 @@ class OrganizacaoFacadeImpl implements OrganizacaoFacade {
 
 	@Override
 	public Optional<OrganizacaoDto> retornarOrganizacaoPorId(String organizacaoId) {
-		RetornarOrganizacaoPorIdUseCase useCase = context.getBean(RetornarOrganizacaoPorIdUseCase.class);
-		return useCase.execute(new RetornarOrganizacaoPorIdUseCase.Requisicao(OrganizacaoId.from(organizacaoId)));
+		BuscarOrganizacaoPorIdUseCase useCase = context.getBean(BuscarOrganizacaoPorIdUseCase.class);
+		return useCase.execute(new BuscarOrganizacaoPorIdUseCase.Requisicao(OrganizacaoId.from(organizacaoId)));
 	}
 
 }

@@ -19,8 +19,8 @@ import com.mksistemas.supplychain.organizacao.AlterarOrganizacaoUseCase;
 import com.mksistemas.supplychain.organizacao.AtivarOrganizacaoUseCase;
 import com.mksistemas.supplychain.organizacao.CriarOrganizacaoUseCase;
 import com.mksistemas.supplychain.organizacao.DesativarOrganizacaoUseCase;
-import com.mksistemas.supplychain.organizacao.RetornarOrganizacaoPorIdUseCase;
-import com.mksistemas.supplychain.organizacao.RetornarTodasOrganizacoesUseCase;
+import com.mksistemas.supplychain.organizacao.BuscarOrganizacaoPorIdUseCase;
+import com.mksistemas.supplychain.organizacao.BuscarTodasOrganizacoesUseCase;
 import com.mksistemas.supplychain.organizacao.domain.OrganizacaoId;
 import com.mksistemas.supplychain.organizacao.query.vo.OrganizacaoDto;
 
@@ -32,20 +32,20 @@ public class OrganizacaoController {
 	private final AlterarOrganizacaoUseCase alterarOrganizacao;
 	private final AtivarOrganizacaoUseCase ativarOrganizacao;
 	private final DesativarOrganizacaoUseCase desativarOrganizacao;
-	private final RetornarTodasOrganizacoesUseCase retornarTodasOrganizacoes;
-	private final RetornarOrganizacaoPorIdUseCase retornarPorId;
+	private final BuscarTodasOrganizacoesUseCase buscarTodasOrganizacoes;
+	private final BuscarOrganizacaoPorIdUseCase vuscarOrganizacaoPorId;
 
 	public OrganizacaoController(final CriarOrganizacaoUseCase criarOrganizacao,
 			final AlterarOrganizacaoUseCase alterarOrganizacao, final AtivarOrganizacaoUseCase ativarOrganizacao,
 			final DesativarOrganizacaoUseCase desativarOrganizacao,
-			final RetornarTodasOrganizacoesUseCase retornarTodasOrganizacoes,
-			final RetornarOrganizacaoPorIdUseCase retornarPorId) {
+			final BuscarTodasOrganizacoesUseCase buscarTodasOrganizacoes,
+			final BuscarOrganizacaoPorIdUseCase buscarOrganizacaoPorId) {
 		this.criarOrganizacao = criarOrganizacao;
 		this.alterarOrganizacao = alterarOrganizacao;
 		this.ativarOrganizacao = ativarOrganizacao;
 		this.desativarOrganizacao = desativarOrganizacao;
-		this.retornarTodasOrganizacoes = retornarTodasOrganizacoes;
-		this.retornarPorId = retornarPorId;
+		this.buscarTodasOrganizacoes = buscarTodasOrganizacoes;
+		this.vuscarOrganizacaoPorId = buscarOrganizacaoPorId;
 	}
 
 	@PostMapping
@@ -79,21 +79,21 @@ public class OrganizacaoController {
 	}
 
 	@GetMapping
-	public ResponseEntity<Slice<OrganizacaoDto>> retornarTodas(
+	public ResponseEntity<Slice<OrganizacaoDto>> buscarTodasOrganizacoes(
 			@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 			@RequestParam(value = "size", required = false, defaultValue = "25") int size) {
 		Pageable pageable = Pageable.ofSize(size).withPage(page);
-		RetornarTodasOrganizacoesUseCase.Requisicao requisicao = new RetornarTodasOrganizacoesUseCase.Requisicao(
+		BuscarTodasOrganizacoesUseCase.Requisicao requisicao = new BuscarTodasOrganizacoesUseCase.Requisicao(
 				pageable);
-		Slice<OrganizacaoDto> response = retornarTodasOrganizacoes.execute(requisicao);
+		Slice<OrganizacaoDto> response = buscarTodasOrganizacoes.execute(requisicao);
 		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping(path = "/{organizacaoId}")
-	public ResponseEntity<OrganizacaoDto> retornarOrganizacaoPorId(
+	public ResponseEntity<OrganizacaoDto> buscarOrganizacaoPorId(
 			@PathVariable(required = true) OrganizacaoId organizacaoId) {
-		Optional<OrganizacaoDto> organizacao = retornarPorId
-				.execute(new RetornarOrganizacaoPorIdUseCase.Requisicao(organizacaoId));
+		Optional<OrganizacaoDto> organizacao = vuscarOrganizacaoPorId
+				.execute(new BuscarOrganizacaoPorIdUseCase.Requisicao(organizacaoId));
 		if (organizacao.isEmpty())
 			return ResponseEntity.notFound().build();
 		return ResponseEntity.ok(organizacao.get());

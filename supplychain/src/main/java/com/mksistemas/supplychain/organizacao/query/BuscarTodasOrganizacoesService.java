@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import com.mksistemas.supplychain.library.queryable.ProcessQuery;
-import com.mksistemas.supplychain.organizacao.RetornarTodasOrganizacoesUseCase;
+import com.mksistemas.supplychain.organizacao.BuscarTodasOrganizacoesUseCase;
 import com.mksistemas.supplychain.organizacao.query.vo.OrganizacaoDto;
 
 import jakarta.persistence.EntityManager;
@@ -15,11 +15,11 @@ import jakarta.validation.Valid;
 @Service
 @Transactional(readOnly = true)
 @Validated
-class RetornarTodasOrganizacoesService implements RetornarTodasOrganizacoesUseCase {
+class BuscarTodasOrganizacoesService implements BuscarTodasOrganizacoesUseCase {
 
 	private final EntityManager entityManager;
 
-	public RetornarTodasOrganizacoesService(EntityManager entityManager) {
+	public BuscarTodasOrganizacoesService(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
 

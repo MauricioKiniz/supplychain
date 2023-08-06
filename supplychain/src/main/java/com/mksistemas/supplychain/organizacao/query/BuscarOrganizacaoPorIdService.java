@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import com.mksistemas.supplychain.library.queryable.ProcessQuery;
-import com.mksistemas.supplychain.organizacao.RetornarOrganizacaoPorIdUseCase;
+import com.mksistemas.supplychain.organizacao.BuscarOrganizacaoPorIdUseCase;
 import com.mksistemas.supplychain.organizacao.query.vo.OrganizacaoDto;
 
 import jakarta.persistence.EntityManager;
@@ -16,11 +16,11 @@ import jakarta.validation.Valid;
 @Service
 @Transactional(readOnly = true)
 @Validated
-class RetornarOrganizacaoPorIdService implements RetornarOrganizacaoPorIdUseCase {
+class BuscarOrganizacaoPorIdService implements BuscarOrganizacaoPorIdUseCase {
 
 	private final EntityManager manager;
 
-	public RetornarOrganizacaoPorIdService(EntityManager manager) {
+	public BuscarOrganizacaoPorIdService(EntityManager manager) {
 		this.manager = manager;
 	}
 

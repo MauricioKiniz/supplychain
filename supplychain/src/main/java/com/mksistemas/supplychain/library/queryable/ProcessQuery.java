@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.util.Strings;
 import org.hibernate.Session;
@@ -92,6 +93,13 @@ public class ProcessQuery<TResult> {
 	public ProcessQuery<TResult> setTransform(Function<Object[], TResult> transform) {
 		Objects.requireNonNull(transform);
 		this.transform = Optional.of(transform);
+		return this;
+	}
+
+	public ProcessQuery<TResult> withoutTransform() {
+		@SuppressWarnings("unchecked")
+		final Function<Object[], TResult> defaultTransform = (tuples) -> (TResult) tuples;
+		this.transform = Optional.of(defaultTransform);
 		return this;
 	}
 
@@ -183,5 +191,11 @@ public class ProcessQuery<TResult> {
 		Objects.nonNull(resultClass);
 		executeQueryToList();
 		return this.resultList.get();
+	}
+
+	public Stream<TResult> runAsStream() {
+		Objects.nonNull(resultClass);
+		executeQueryToList();
+		return this.resultList.get().stream();
 	}
 }

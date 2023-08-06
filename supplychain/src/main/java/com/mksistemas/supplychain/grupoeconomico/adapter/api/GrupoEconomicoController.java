@@ -1,6 +1,7 @@
 package com.mksistemas.supplychain.grupoeconomico.adapter.api;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mksistemas.supplychain.grupoeconomico.AlterarGrupoEconomicoUseCase;
 import com.mksistemas.supplychain.grupoeconomico.AtivarGrupoEconomicoUseCase;
+import com.mksistemas.supplychain.grupoeconomico.BuscarGrupoEconomicoPorIdUseCase;
 import com.mksistemas.supplychain.grupoeconomico.BuscarTodosGruposUseCase;
 import com.mksistemas.supplychain.grupoeconomico.CriarGrupoEconomicoUseCase;
 import com.mksistemas.supplychain.grupoeconomico.DesativarGrupoEconomicoUseCase;
@@ -34,11 +36,13 @@ public class GrupoEconomicoController {
 	private final VincularOrganizacaoUseCase vincularOrganizacao;
 	private final DesvincularOrganizacaoUseCase desvincularOrganizacao;
 	private final BuscarTodosGruposUseCase buscarTodosGrupos;
+	private final BuscarGrupoEconomicoPorIdUseCase buscarGrupoPorId;
 
 	public GrupoEconomicoController(CriarGrupoEconomicoUseCase criarGrupoEconomico,
 			AlterarGrupoEconomicoUseCase alterarGrupoEconomico, AtivarGrupoEconomicoUseCase ativarGrupoEconomico,
 			DesativarGrupoEconomicoUseCase desativarGrupoEconomico, VincularOrganizacaoUseCase vincularOrganizacao,
-			DesvincularOrganizacaoUseCase desvincularOrganizacao, BuscarTodosGruposUseCase buscarTodosGrupos) {
+			DesvincularOrganizacaoUseCase desvincularOrganizacao, BuscarTodosGruposUseCase buscarTodosGrupos,
+			BuscarGrupoEconomicoPorIdUseCase buscarGrupoPorId) {
 		this.criarGrupoEconomico = criarGrupoEconomico;
 		this.alterarGrupoEconomico = alterarGrupoEconomico;
 		this.ativarGrupoEconomico = ativarGrupoEconomico;
@@ -46,6 +50,7 @@ public class GrupoEconomicoController {
 		this.vincularOrganizacao = vincularOrganizacao;
 		this.desvincularOrganizacao = desvincularOrganizacao;
 		this.buscarTodosGrupos = buscarTodosGrupos;
+		this.buscarGrupoPorId = buscarGrupoPorId;
 	}
 
 	@PostMapping
@@ -95,6 +100,14 @@ public class GrupoEconomicoController {
 	@GetMapping
 	public ResponseEntity<List<BuscarTodosGruposUseCase.GrupoEconomicoDto>> buscarTodosGrupos() {
 		return ResponseEntity.ok(buscarTodosGrupos.execute(null));
+	}
+
+	@GetMapping(path = "/{grupoEconomicoId}")
+	public ResponseEntity<BuscarGrupoEconomicoPorIdUseCase.GrupoEconomicoDto> buscarGrupoEconomicoPorId(
+			@PathVariable String grupoEconomicoId) {
+		Optional<BuscarGrupoEconomicoPorIdUseCase.GrupoEconomicoDto> resposta = buscarGrupoPorId
+				.execute(new BuscarGrupoEconomicoPorIdUseCase.Requisicao(grupoEconomicoId));
+		return resposta.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(resposta.get());
 	}
 
 }
