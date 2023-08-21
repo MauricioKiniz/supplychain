@@ -4,8 +4,8 @@ import jakarta.annotation.Generated;
 
 public class ValorItem {
 	private String nome;
-	private Boolean exigeDescricao;
-	private Boolean exigeDocumento;
+	private ValorItemEnum exigeDescricao;
+	private ValorItemEnum exigeDocumento;
 	private int sequencia;
 
 	@Generated("SparkTools")
@@ -27,19 +27,19 @@ public class ValorItem {
 		this.nome = nome;
 	}
 
-	public Boolean getExigeDescricao() {
+	public ValorItemEnum getExigeDescricao() {
 		return exigeDescricao;
 	}
 
-	public void setExigeDescricao(Boolean exigeDescricao) {
+	public void setExigeDescricao(ValorItemEnum exigeDescricao) {
 		this.exigeDescricao = exigeDescricao;
 	}
 
-	public Boolean getExigeDocumento() {
+	public ValorItemEnum getExigeDocumento() {
 		return exigeDocumento;
 	}
 
-	public void setExigeDocumento(Boolean exigeDocumento) {
+	public void setExigeDocumento(ValorItemEnum exigeDocumento) {
 		this.exigeDocumento = exigeDocumento;
 	}
 
@@ -59,8 +59,8 @@ public class ValorItem {
 	@Generated("SparkTools")
 	public static final class Builder {
 		private String nome;
-		private Boolean exigeDescricao;
-		private Boolean exigeDocumento;
+		private ValorItemEnum exigeDescricao;
+		private ValorItemEnum exigeDocumento;
 		private int sequencia;
 
 		private Builder() {
@@ -71,12 +71,12 @@ public class ValorItem {
 			return this;
 		}
 
-		public Builder withExigeDescricao(Boolean exigeDescricao) {
+		public Builder withExigeDescricao(ValorItemEnum exigeDescricao) {
 			this.exigeDescricao = exigeDescricao;
 			return this;
 		}
 
-		public Builder withExigeDocumento(Boolean exigeDocumento) {
+		public Builder withExigeDocumento(ValorItemEnum exigeDocumento) {
 			this.exigeDocumento = exigeDocumento;
 			return this;
 		}

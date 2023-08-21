@@ -2,6 +2,7 @@ package com.mksistemas.supplychain.checklist.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -25,7 +26,7 @@ public class ChecklistItem extends AbstractAggregateRoot<ChecklistItem> {
 
 	@EmbeddedId()
 	@AttributeOverride(name = "id", column = @Column(name = "checklist_item_id"))
-	private ChecklistId checklistItemId;
+	private ChecklistItemId checklistItemId;
 
 	@Column(name = "nome", length = 250, nullable = false)
 	private String nome;
@@ -44,19 +45,38 @@ public class ChecklistItem extends AbstractAggregateRoot<ChecklistItem> {
 	@Column(name = "valores", nullable = true)
 	private List<ValorItem> valores = new ArrayList<>();
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(checklistItemId);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ChecklistItem other = (ChecklistItem) obj;
+		return Objects.equals(checklistItemId, other.checklistItemId);
+	}
+
 	@Generated("SparkTools")
 	private ChecklistItem(Builder builder) {
 		this.checklistItemId = builder.checklistItemId;
 		this.nome = builder.nome;
 		this.version = builder.version;
 		this.descricao = builder.descricao;
+		this.setChecklist(builder.checklist);
+		this.valores = builder.valores;
 	}
 
-	public ChecklistId getChecklistItemId() {
+	public ChecklistItemId getChecklistItemId() {
 		return checklistItemId;
 	}
 
-	public void setChecklistItemId(ChecklistId checklistItemId) {
+	public void setChecklistItemId(ChecklistItemId checklistItemId) {
 		this.checklistItemId = checklistItemId;
 	}
 
@@ -84,6 +104,14 @@ public class ChecklistItem extends AbstractAggregateRoot<ChecklistItem> {
 		this.descricao = descricao;
 	}
 
+	public Checklist getChecklist() {
+		return checklist;
+	}
+
+	public void setChecklist(Checklist checklist) {
+		this.checklist = checklist;
+	}
+
 	@Generated("SparkTools")
 	public static Builder builder() {
 		return new Builder();
@@ -91,15 +119,17 @@ public class ChecklistItem extends AbstractAggregateRoot<ChecklistItem> {
 
 	@Generated("SparkTools")
 	public static final class Builder {
-		private ChecklistId checklistItemId;
+		private ChecklistItemId checklistItemId;
 		private String nome;
 		private Integer version;
 		private String descricao;
+		private Checklist checklist;
+		private List<ValorItem> valores = new ArrayList<>();
 
 		private Builder() {
 		}
 
-		public Builder withChecklistItemId(ChecklistId checklistItemId) {
+		public Builder withChecklistItemId(ChecklistItemId checklistItemId) {
 			this.checklistItemId = checklistItemId;
 			return this;
 		}
@@ -116,6 +146,16 @@ public class ChecklistItem extends AbstractAggregateRoot<ChecklistItem> {
 
 		public Builder withDescricao(String descricao) {
 			this.descricao = descricao;
+			return this;
+		}
+
+		public Builder withChecklist(Checklist checklist) {
+			this.checklist = checklist;
+			return this;
+		}
+
+		public Builder withValores(List<ValorItem> valores) {
+			this.valores = valores;
 			return this;
 		}
 

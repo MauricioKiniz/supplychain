@@ -1,12 +1,14 @@
 package com.mksistemas.supplychain.checklist.domain;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.AbstractAggregateRoot;
 
 import jakarta.annotation.Generated;
 import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -36,8 +38,26 @@ public class Checklist extends AbstractAggregateRoot<Checklist> {
 	@Column(name = "descricao", length = 4000, nullable = true)
 	private String descricao;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "checklist")
-	private Set<ChecklistItem> orderDetail = new HashSet<>();
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "checklist", cascade = CascadeType.PERSIST)
+	private List<ChecklistItem> items = new ArrayList<>();
+
+	public void adicionarItem(ChecklistItem item) {
+		items.add(item);
+	}
+
+	public boolean alterarItem(ChecklistItem item) {
+		int posicao = items.indexOf(item);
+		if (posicao >= 0)
+			items.set(posicao, item);
+		return posicao >= 0;
+	}
+
+	public boolean removerItemPorId(ChecklistItemId id) {
+		Optional<ChecklistItem> item = items.stream().filter(dt -> dt.getChecklistItemId().equals(id)).findFirst();
+		if (item.isPresent())
+			items.remove(item.get());
+		return item.isPresent();
+	}
 
 	@Generated("SparkTools")
 	private Checklist(Builder builder) {
@@ -46,6 +66,7 @@ public class Checklist extends AbstractAggregateRoot<Checklist> {
 		this.version = builder.version;
 		this.ativo = builder.ativo;
 		this.descricao = builder.descricao;
+		this.items = builder.items;
 	}
 
 	public ChecklistId getChecklistId() {
@@ -88,6 +109,14 @@ public class Checklist extends AbstractAggregateRoot<Checklist> {
 		this.descricao = descricao;
 	}
 
+	public List<ChecklistItem> getItems() {
+		return items;
+	}
+
+	public void setItems(List<ChecklistItem> items) {
+		this.items = items;
+	}
+
 	@Generated("SparkTools")
 	public static Builder builder() {
 		return new Builder();
@@ -100,6 +129,7 @@ public class Checklist extends AbstractAggregateRoot<Checklist> {
 		private Integer version;
 		private boolean ativo = true;
 		private String descricao;
+		private List<ChecklistItem> items = new ArrayList<>();
 
 		private Builder() {
 		}
@@ -126,6 +156,11 @@ public class Checklist extends AbstractAggregateRoot<Checklist> {
 
 		public Builder withDescricao(String descricao) {
 			this.descricao = descricao;
+			return this;
+		}
+
+		public Builder withItems(List<ChecklistItem> items) {
+			this.items = items;
 			return this;
 		}
 
